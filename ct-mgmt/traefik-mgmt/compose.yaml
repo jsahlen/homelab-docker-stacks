@@ -1,0 +1,41 @@
+services:
+  traefik-mgmt:
+    image: traefik:3
+    container_name: traefik-mgmt
+    restart: unless-stopped
+    user: 1005:1005
+    command:
+      - --providers.file.directory=/etc/traefik/traefik.conf.d
+      - --providers.file.watch=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=cloudflare
+      - --certificatesresolvers.cloudflare.acme.email=${EMAIL:?}
+      - --certificatesresolvers.cloudflare.acme.storage=/etc/traefik/acme.json
+      - --certificatesresolvers.cloudflare.acme.dnschallenge=true
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
+      - --log.level=INFO
+    environment:
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_dns_api_token
+    secrets:
+      - cloudflare_dns_api_token
+    networks:
+      - mgmt
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./traefik.conf.d:/etc/traefik/traefik.conf.d
+      - ./data/acme.json:/etc/traefik/acme.json # create it manually and chmod to 600
+
+networks:
+  mgmt:
+    external: true
+
+secrets:
+  cloudflare_dns_api_token:
+    file: ./secrets/cloudflare_dns_api_token

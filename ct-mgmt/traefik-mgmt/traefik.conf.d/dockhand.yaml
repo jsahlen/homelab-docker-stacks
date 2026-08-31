@@ -1,0 +1,13 @@
+http:
+  routers:
+    dockhand:
+      rule: "Host(`dockhand.local.irken-empire.org`)"
+      entryPoints:
+        - websecure
+      service: dockhand
+
+  services:
+    dockhand:
+      loadBalancer:
+        servers:
+          - url: "http://dockhand:3000"
