@@ -1,4 +1,4 @@
-# ct-mgmt stack
+# mgmt stack
 
 Needs a manually-created `mgmt` network:
 

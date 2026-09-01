@@ -6,7 +6,7 @@ services:
     environment:
       PUID: 1005
       PGID: 1005
-      DATA_DIR: /docker/ct-mgmt/dockhand/data
+      DATA_DIR: /docker/mgmt/dockhand/data
       TRUST_FORWARD_HEADERS: true
       COOKIE_SECURE: true
     group_add:

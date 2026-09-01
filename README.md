@@ -24,13 +24,13 @@ my-docker-stacks/
   everything by default; `PUID=4000 / PGID=4000` (`media`) only for stacks
   that bind-mount NAS media.
 
-## Why ct-mgmt is versioned here but not Dockhand-managed
+## Why mgmt is versioned here but not Dockhand-managed
 
-`ct-mgmt` (Dockhand + Pulse) is kept in this repo for consistency, but its
+`mgmt` (Dockhand + Pulse) is kept in this repo for consistency, but its
 stacks are added to Dockhand as **Internal** stacks, not **Git** stacks with
 auto-sync. Dockhand shouldn't redeploy itself (or the thing that monitors
 it) via its own automation — if a bad change breaks Dockhand, there'd be
-nothing running to notice or roll it back. Update `ct-mgmt` stacks manually.
+nothing running to notice or roll it back. Update `mgmt` stacks manually.
 
 Every other LXC's stacks are intended to be managed as Git stacks in
 Dockhand once that's set up.
@@ -46,7 +46,7 @@ git clone --no-checkout --filter=blob:none \
 cd /docker
 
 git sparse-checkout init --cone
-git sparse-checkout set <lxc-name>   # e.g. ct-media
+git sparse-checkout set <lxc-name>   # e.g. media
 
 git checkout main
 ```
