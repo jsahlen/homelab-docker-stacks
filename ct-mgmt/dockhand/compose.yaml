@@ -13,7 +13,7 @@ services:
       - "${DOCKER_GID:?find with stat -c '%g' /var/run/docker.sock}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/docker/ct-mgmt/dockhand/data
+      - /docker:/docker
     networks:
       - mgmt
 
