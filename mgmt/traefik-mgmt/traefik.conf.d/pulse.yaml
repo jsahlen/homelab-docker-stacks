@@ -1,0 +1,13 @@
+http:
+  routers:
+    pulse:
+      rule: "Host(`pulse.local.irken-empire.org`)"
+      entryPoints:
+        - websecure
+      service: pulse
+
+  services:
+    pulse:
+      loadBalancer:
+        servers:
+          - url: "http://pulse:7655"
