@@ -1,6 +1,6 @@
 services:
   kometa:
-    image: kometateam/kometa
+    image: kometateam/kometa:latest
     container_name: kometa
     user: 1005:1005
     environment:
