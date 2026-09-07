@@ -1,0 +1,11 @@
+services:
+  kometa:
+    image: kometateam/kometa
+    container_name: kometa
+    user: 1005:1005
+    environment:
+      TZ: Europe/Stockholm
+      KOMETA_TIMES: 01:00,05:00,09:00,13:00,17:00,21:00
+    volumes:
+      - ./data:/config
+      - /mnt/media:/data:ro
