@@ -1,0 +1,18 @@
+services:
+  tautulli:
+    image: ghcr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+    networks:
+      - plex-internal
+    volumes:
+      - ./data:/config
+    ports:
+      - 8181:8181
+
+networks:
+  plex-internal:
+    external: true
