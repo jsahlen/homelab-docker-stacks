@@ -1,0 +1,19 @@
+services:
+  plex:
+    image: ghcr.io/linuxserver/plex:latest
+    container_name: plex
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      VERSION: docker
+      PLEX_CLAIM: ${PLEX_CLAIM}
+    volumes:
+      - ./data:/config
+      - ../scripts/10-video-gid.sh:/custom-cont-init.d/10-video-gid.sh:ro
+      - /mnt/media:/data:ro
+      - /mnt/downloads/transcode:/transcode
+    devices:
+      - /dev/dri:/dev/dri
+    ports:
+      - 32400:32400
