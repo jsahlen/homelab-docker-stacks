@@ -1,0 +1,23 @@
+services:
+  plex-nfo-exporter:
+    image: ghcr.io/van-geaux/plex_nfo_exporter:latest
+    container_name: plex-nfo-exporter
+    user: 1005:1005
+    group_add:
+      - 4000
+    environment:
+      TZ: Europe/Stockholm
+      CRON_SCHEDULE: 0 4 * * *
+      PLEX_URL: ${PLEX_NFO_EXPORTER_URL:?}
+      PLEX_TOKEN: ${PLEX_NFO_EXPORTER_TOKEN:?}
+    networks:
+      - media
+    volumes:
+      - ./data/.env:/app/.env
+      - ./data/logs:/app/logs
+      - ./data/config.yml:/app/config.yml
+      - /mnt/media:/data
+
+networks:
+  media:
+    external: true
