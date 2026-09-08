@@ -9,7 +9,7 @@ services:
       VERSION: docker
       PLEX_CLAIM: ${PLEX_CLAIM}
     networks:
-      - plex-internal
+      - media
     volumes:
       - ./data:/config
       - ../scripts/10-video-gid.sh:/custom-cont-init.d/10-video-gid.sh:ro
@@ -21,5 +21,5 @@ services:
       - 32400:32400
 
 networks:
-  plex-internal:
-    name: plex-internal
+  media:
+    external: true

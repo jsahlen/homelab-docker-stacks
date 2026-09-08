@@ -7,12 +7,12 @@ services:
       PUID: 1005
       PGID: 1005
     networks:
-      - plex-internal
+      - media
     volumes:
       - ./data:/config
     ports:
       - 8181:8181
 
 networks:
-  plex-internal:
+  media:
     external: true
