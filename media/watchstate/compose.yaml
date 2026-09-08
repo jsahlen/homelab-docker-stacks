@@ -1,0 +1,20 @@
+services:
+  watchstate:
+    image: ghcr.io/arabcoders/watchstate:latest
+    container_name: watchstate
+    restart: unless-stopped
+    user: 1005:1005
+    environment:
+      TZ: Europe/Stockholm
+      WS_CRON_IMPORT: 1
+      WS_CRON_EXPORT: 1
+    networks:
+      - media
+    volumes:
+      - ./data:/config
+    ports:
+      - 8081:8080
+
+networks:
+  media:
+    external: true
