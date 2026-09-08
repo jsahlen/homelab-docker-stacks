@@ -3,6 +3,7 @@ services:
     image: ghcr.io/seerr-team/seerr:latest
     init: true
     container_name: seerr
+    restart: unless-stopped
     user: 1005:1005
     environment:
       TZ: Europe/Stockholm

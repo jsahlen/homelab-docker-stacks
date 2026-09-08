@@ -2,6 +2,7 @@ services:
   kometa:
     image: kometateam/kometa:latest
     container_name: kometa
+    restart: unless-stopped
     user: 1005:1005
     environment:
       TZ: Europe/Stockholm

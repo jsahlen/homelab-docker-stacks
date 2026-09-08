@@ -2,6 +2,7 @@ services:
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web:latest
     container_name: calibre-web
+    restart: unless-stopped
     environment:
       TZ: Europe/Stockholm
       PUID: 1005

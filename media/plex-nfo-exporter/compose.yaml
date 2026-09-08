@@ -2,6 +2,7 @@ services:
   plex-nfo-exporter:
     image: ghcr.io/van-geaux/plex_nfo_exporter:latest
     container_name: plex-nfo-exporter
+    restart: unless-stopped
     user: 1005:1005
     group_add:
       - 4000

@@ -2,6 +2,7 @@ services:
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:latest
     container_name: audiobookshelf
+    restart: unless-stopped
     user: 1005:1005
     group_add:
       - 4000
