@@ -1,0 +1,15 @@
+services:
+  komga:
+    image: ghcr.io/gotson/komga:latest
+    container_name: komga
+    restart: unless-stopped
+    user: 1005:1005
+    environment:
+      TZ: Europe/Stockholm
+      KOMGA_REMEMBERME_KEY: ${KOMGA_REMEMBERME_KEY:?}
+      KOMGA_REMEMBERME_VALIDITY: ${KOMGA_REMEMBERME_VALIDITY:?}
+    volumes:
+      - ./data:/config
+      - /mnt/media/Comics:/data:ro
+    ports:
+      - 8056:25600
