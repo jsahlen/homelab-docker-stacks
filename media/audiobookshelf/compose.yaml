@@ -1,0 +1,15 @@
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    user: 1005:1005
+    group_add:
+      - 4000
+    environment:
+      TZ: Europe/Stockholm
+    volumes:
+      - ./data/config:/config
+      - ./data/metadata:/metadata
+      - /mnt/media/Audiobooks:/data/Audiobooks:rw
+    ports:
+      - 8078:80
