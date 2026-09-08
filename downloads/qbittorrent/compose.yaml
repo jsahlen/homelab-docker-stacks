@@ -1,7 +1,7 @@
 services:
-  gluetun-qbittorrent:
+  gluetun:
     image: qmcgaw/gluetun:latest
-    container_name: gluetun-qbittorrent
+    container_name: qbittorrent-gluetun
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -33,9 +33,9 @@ services:
     image: ghcr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     restart: unless-stopped
-    network_mode: service:gluetun-qbittorrent
+    network_mode: service:gluetun
     depends_on:
-      - gluetun-qbittorrent
+      - gluetun
     environment:
       TZ: Europe/Stockholm
       PUID: 1005
