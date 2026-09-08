@@ -1,0 +1,19 @@
+services:
+  jellyfin:
+    image: ghcr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      JELLYFIN_PublishedServerUrl: ${JELLYFIN_PublishedServerUrl:?}
+      DOCKER_MODS: linuxserver/mods:jellyfin-opencl-intel
+    volumes:
+      - ./data:/config
+      - ../scripts/10-video-gid.sh:/custom-cont-init.d/10-video-gid.sh:ro
+      - /mnt/media:/data:ro
+      - /mnt/downloads/transcode:/transcode
+    devices:
+      - /dev/dri:/dev/dri
+    ports:
+      - 8096:8096
