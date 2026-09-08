@@ -8,6 +8,8 @@ services:
       PGID: 1005
       JELLYFIN_PublishedServerUrl: ${JELLYFIN_PublishedServerUrl:?}
       DOCKER_MODS: linuxserver/mods:jellyfin-opencl-intel
+    networks:
+      - media
     volumes:
       - ./data:/config
       - ../scripts/10-video-gid.sh:/custom-cont-init.d/10-video-gid.sh:ro
@@ -17,3 +19,7 @@ services:
       - /dev/dri:/dev/dri
     ports:
       - 8096:8096
+
+networks:
+  media:
+    external: true
