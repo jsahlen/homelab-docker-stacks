@@ -1,0 +1,18 @@
+services:
+  qui:
+    image: ghcr.io/autobrr/qui:latest
+    container_name: qui
+    restart: unless-stopped
+    user: 1005:1005
+    environment:
+      TZ: Europe/Stockholm
+    networks:
+      downloads:
+    volumes:
+      - ./data:/config
+    ports:
+      - 8212:7476
+
+networks:
+  downloads:
+    external: true

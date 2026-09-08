@@ -1,0 +1,58 @@
+services:
+  gluetun-qbittorrent:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun-qbittorrent
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      TZ: Europe/Stockholm
+      VPN_SERVICE_PROVIDER: custom   # replace with your provider, e.g. protonvpn, mullvad, airvpn, pia
+      VPN_TYPE: wireguard
+      WIREGUARD_ENDPOINT_IP: ${WIREGUARD_ENDPOINT_IP:?}
+      WIREGUARD_ENDPOINT_PORT: ${WIREGUARD_ENDPOINT_PORT:-51820}
+      WIREGUARD_PUBLIC_KEY: ${WIREGUARD_PUBLIC_KEY:?}
+      FIREWALL_VPN_INPUT_PORTS: ${TORRENTING_PORT:?}
+      FIREWALL_INPUT_PORTS: 8211
+      UPDATER_PERIOD: 24h
+    secrets:
+      - wireguard_private_key
+      - wireguard_addresses
+    networks:
+      default:
+      downloads:
+        aliases:
+          - qbittorrent
+          - qbittorrent-internal
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8211:8211
+
+  qbittorrent:
+    image: ghcr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    network_mode: service:gluetun-qbittorrent
+    depends_on:
+      - gluetun-qbittorrent
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      WEBUI_PORT: 8211
+      TORRENTING_PORT: ${TORRENTING_PORT:?}
+    volumes:
+      - ./data:/config
+      - /mnt/downloads/torrents:/downloads
+      - /mnt/media:/mnt/media
+
+secrets:
+  wireguard_private_key:
+    file: ./secrets/wireguard_private_key
+  wireguard_addresses:
+    file: ./secrets/wireguard_addresses
+
+networks:
+  downloads:
+    external: true
