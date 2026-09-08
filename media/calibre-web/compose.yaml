@@ -1,0 +1,14 @@
+services:
+  calibre-web:
+    image: ghcr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      DOCKER_MODS: linuxserver/mods:universal-calibre
+    volumes:
+      - ./data:/config
+      - /mnt/media/Books/Calibre:/books
+    ports:
+      - 8083:8083
