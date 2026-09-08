@@ -13,7 +13,7 @@ services:
       - media
     volumes:
       - ./data:/config
-      - ../scripts/10-video-gid.sh:/custom-cont-init.d/10-video-gid.sh:ro
+      - ../../shared/scripts/linuxserver-video-gid.sh:/custom-cont-init.d/10-video-gid.sh:ro
       - /mnt/media:/data:ro
       - /mnt/downloads/transcode:/transcode
     devices:
