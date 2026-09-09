@@ -19,7 +19,6 @@ services:
       - wireguard_private_key
       - wireguard_addresses
     networks:
-      default:
       downloads:
         aliases:
           - qbittorrent
