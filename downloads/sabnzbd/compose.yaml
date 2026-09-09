@@ -1,0 +1,22 @@
+services:
+  sabnzbd:
+    image: ghcr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      DOCKER_MODS: linuxserver/mods:sabnzbd-par2cmdline-turbo
+    networks:
+      - downloads
+    volumes:
+      - ../../shared/scripts/linuxserver-media-gid.sh:/custom-cont-init.d/media-gid.sh:ro
+      - ./data:/config
+      - /mnt/downloads:/downloads
+    ports:
+      - 8209:8080
+
+networks:
+  downloads:
+    external: true
