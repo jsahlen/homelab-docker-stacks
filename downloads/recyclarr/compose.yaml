@@ -1,0 +1,21 @@
+services:
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:8
+    container_name: recyclarr
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs: /tmp
+    user: 1005:1005
+    init: true
+    environment:
+      TZ: Europe/Stockholm
+    networks:
+      - downloads
+    volumes:
+      - ./data:/config
+
+networks:
+  downloads:
+    external: true
