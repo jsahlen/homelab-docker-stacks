@@ -1,0 +1,19 @@
+services:
+  autobrr:
+    image: ghcr.io/autobrr/autobrr:latest
+    container_name: autobrr
+    restart: unless-stopped
+    user: 1005:1005
+    environment:
+      TZ: Europe/Stockholm
+    networks:
+      - downloads
+    volumes:
+      - ./data/config:/config
+      - ./data/logs:/logs
+    ports:
+      - 8201:7474
+
+networks:
+  downloads:
+    external: true
