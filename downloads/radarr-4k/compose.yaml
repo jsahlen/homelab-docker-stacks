@@ -8,7 +8,7 @@ services:
       PGID: 1005
       DOCKER_MODS: ghcr.io/themepark-dev/theme.park:radarr
       TP_THEME: space-gray
-      TP_ADDON: radarr-4k-logo
+      TP_ADDON: radarr-4k-logo|radarr-4k-favicon
     networks:
       - downloads
     volumes:
