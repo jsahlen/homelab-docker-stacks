@@ -1,0 +1,21 @@
+services:
+  radarr:
+    image: ghcr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+    networks:
+      - downloads
+    volumes:
+      - ../../shared/scripts/linuxserver-media-gid.sh:/custom-cont-init.d/media-gid.sh:ro
+      - ./data:/config
+      - /mnt/downloads:/downloads
+      - /mnt/media:/media
+    ports:
+      - 8203:7878
+
+networks:
+  downloads:
+    external: true
