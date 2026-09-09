@@ -1,0 +1,16 @@
+services:
+  beets-audiobooks:
+    image: ghcr.io/linuxserver/beets:2.10.0
+    container_name: beets-audiobooks
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      EDITOR: vi
+    volumes:
+      - ../../shared/scripts/linuxserver-media-gid.sh:/custom-cont-init.d/media-gid.sh:ro
+      - ./install-deps.sh:/custom-cont-init.d/install-deps.sh:ro
+      - ./data:/config
+      - /mnt/downloads:/downloads
+      - /mnt/media:/media
