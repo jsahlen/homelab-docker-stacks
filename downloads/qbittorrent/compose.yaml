@@ -42,9 +42,9 @@ services:
       WEBUI_PORT: 8211
       TORRENTING_PORT: ${TORRENTING_PORT:?}
     volumes:
+      - ../../shared/scripts/linuxserver-media-gid.sh:/custom-cont-init.d/media-gid.sh:ro
       - ./data:/config
       - /mnt/downloads/torrents:/downloads
-      - /mnt/media:/mnt/media
 
 secrets:
   wireguard_private_key:
