@@ -1,0 +1,55 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: slskd-gluetun
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      TZ: Europe/Stockholm
+      VPN_SERVICE_PROVIDER: custom   # replace with your provider, e.g. protonvpn, mullvad, airvpn, pia
+      VPN_TYPE: wireguard
+      WIREGUARD_ENDPOINT_IP: ${WIREGUARD_ENDPOINT_IP:?}
+      WIREGUARD_ENDPOINT_PORT: ${WIREGUARD_ENDPOINT_PORT:-51820}
+      WIREGUARD_PUBLIC_KEY: ${WIREGUARD_PUBLIC_KEY:?}
+      FIREWALL_INPUT_PORTS: 8210
+      UPDATER_PERIOD: 24h
+    secrets:
+      - wireguard_private_key
+      - wireguard_addresses
+    networks:
+      downloads:
+        aliases:
+          - slskd
+          - slskd-internal
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8210:5030
+
+  slskd:
+    image: ghcr.io/slskd/slskd:latest
+    container_name: slskd
+    restart: unless-stopped
+    network_mode: service:gluetun
+    user: 1005:1005
+    group_add:
+      - 4000
+    depends_on:
+      - gluetun
+    environment:
+      TZ: Europe/Stockholm
+      SLSKD_REMOTE_CONFIGURATION: true
+    volumes:
+      - ./data:/app
+      - /mnt/downloads/soulseek:/downloads
+
+secrets:
+  wireguard_private_key:
+    file: ./secrets/wireguard_private_key
+  wireguard_addresses:
+    file: ./secrets/wireguard_addresses
+
+networks:
+  downloads:
+    external: true
