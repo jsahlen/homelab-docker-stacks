@@ -1,0 +1,30 @@
+services:
+  lidarr:
+    image: ghcr.io/linuxserver/lidarr:nightly
+    container_name: lidarr
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      DOCKER_MODS: linuxserver/mods:universal-package-install|linuxserver/mods:universal-apprise
+      INSTALL_PACKAGES: build-base|cairo-dev|cargo|cmake|ffmpeg-dev|fftw-dev|git|gobject-introspection-dev|jpeg-dev|libpng-dev|mpg123-dev|openjpeg-dev|python3-dev|chromaprint|expat|ffmpeg|fftw|flac|gdbm|gobject-introspection|gst-plugins-good|gstreamer|imagemagick|jpeg|lame|libffi|libpng|mpg123|nano|openjpeg|python3|sqlite-libs
+      INSTALL_PIP_PACKAGES: beautifulsoup4|beets==2.5.1|beets-extrafiles|beetcamp|python3-discogs-client|flask|PyGObject|pyacoustid|pylast|requests|requests_oauthlib|typing-extensions|unidecode
+      APPRISE_URL: ${BEETS_APPRISE_URL:?}
+      BEETSDIR: /beets
+    networks:
+      - downloads
+    volumes:
+      - ../../shared/scripts/linuxserver-media-gid.sh:/custom-cont-init.d/media-gid.sh:ro
+      - ./data/config:/config
+      - ./data/scripts:/scripts
+      - ./data/beets:/beets
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/downloads:/downloads
+      - /mnt/media:/media
+    ports:
+      - 8207:8686
+
+networks:
+  downloads:
+    external: true
