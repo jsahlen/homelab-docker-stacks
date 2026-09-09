@@ -1,0 +1,35 @@
+services:
+  nextcloud:
+    image: ghcr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 4000
+      PGID: 4000
+      MYSQL_PASSWORD: nextcloud
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_HOST: mariadb
+    volumes:
+      - ./data/app:/config
+      - /mnt/nextcloud:/data
+    ports:
+      - 8008:80
+
+  mariadb:
+    image: mariadb:latest
+    container_name: nextcloud-mariadb
+    restart: unless-stopped
+    user: 4000:4000
+    command: ['--innodb_read_only_compressed=OFF']
+    environment:
+      TZ: Europe/Stockholm
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      MYSQL_PASSWORD: nextcloud
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+    volumes:
+      - ./data/db:/var/lib/mysql
