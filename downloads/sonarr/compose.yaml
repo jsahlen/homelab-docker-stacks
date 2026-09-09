@@ -1,0 +1,21 @@
+services:
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+    networks:
+      - downloads
+    volumes:
+      - ../../shared/scripts/linuxserver-media-gid.sh:/custom-cont-init.d/media-gid.sh:ro
+      - ./data:/config
+      - /mnt/downloads:/downloads
+      - /mnt/media:/media
+    ports:
+      - 8202:8989
+
+networks:
+  downloads:
+    external: true
