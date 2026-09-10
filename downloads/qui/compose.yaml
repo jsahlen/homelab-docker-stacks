@@ -10,6 +10,7 @@ services:
       downloads:
     volumes:
       - ./data:/config
+      - /mnt/downloads/torrents:/downloads
     ports:
       - 8212:7476
 
