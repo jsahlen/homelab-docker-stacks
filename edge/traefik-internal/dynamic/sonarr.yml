@@ -1,0 +1,14 @@
+http:
+  routers:
+    sonarr:
+      rule: Host(`sonarr.local.irken-empire.org`)
+      entrypoints: websecure
+      service: sonarr
+      middlewares:
+        - tinyauth
+
+  services:
+    sonarr:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8202

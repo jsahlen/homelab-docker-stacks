@@ -1,0 +1,14 @@
+http:
+  routers:
+    prowlarr:
+      rule: Host(`prowlarr.local.irken-empire.org`)
+      entrypoints: websecure
+      service: prowlarr
+      middlewares:
+        - tinyauth
+
+  services:
+    prowlarr:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8205

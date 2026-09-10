@@ -1,0 +1,14 @@
+http:
+  routers:
+    radarr:
+      rule: Host(`radarr.local.irken-empire.org`)
+      entrypoints: websecure
+      service: radarr
+      middlewares:
+        - tinyauth
+
+  services:
+    radarr:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8203

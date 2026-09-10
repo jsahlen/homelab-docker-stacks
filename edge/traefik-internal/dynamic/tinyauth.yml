@@ -1,0 +1,22 @@
+http:
+  routers:
+    tinyauth:
+      rule: Host(`tinyauth.local.irken-empire.org`)
+      entryPoints: websecure
+      service: tinyauth
+
+  middlewares:
+    tinyauth:
+      forwardAuth:
+        address: http://tinyauth-internal:3000/api/auth/traefik
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups"
+          - "Remote-Email"
+          - "Remote-Name"
+
+  services:
+    tinyauth:
+      loadBalancer:
+        servers:
+          - url: http://tinyauth-internal:3000

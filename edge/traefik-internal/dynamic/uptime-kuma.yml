@@ -1,0 +1,12 @@
+http:
+  routers:
+    uptime-kuma:
+      rule: Host(`uptime-kuma.local.irken-empire.org`) || Host(`status.local.irken-empire.org`)
+      entrypoints: websecure
+      service: uptime-kuma
+
+  services:
+    uptime-kuma:
+      loadbalancer:
+        servers:
+          - url: http://uptime-kuma:3001

@@ -1,0 +1,14 @@
+http:
+  routers:
+    slskd:
+      rule: Host(`slskd.local.irken-empire.org`)
+      entrypoints: websecure
+      service: slskd
+      middlewares:
+        - tinyauth
+
+  services:
+    slskd:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8210

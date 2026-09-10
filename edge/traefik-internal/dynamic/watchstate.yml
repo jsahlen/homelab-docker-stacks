@@ -1,0 +1,14 @@
+http:
+  routers:
+    watchstate:
+      rule: Host(`watchstate.local.irken-empire.org`)
+      entrypoints: websecure
+      service: watchstate
+      middlewares:
+        - tinyauth
+
+  services:
+    watchstate:
+      loadbalancer:
+        servers:
+          - url: http://ct-media:8081

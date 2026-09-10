@@ -1,0 +1,14 @@
+http:
+  routers:
+    lidarr:
+      rule: Host(`lidarr.local.irken-empire.org`)
+      entrypoints: websecure
+      service: lidarr
+      middlewares:
+        - tinyauth
+
+  services:
+    lidarr:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8207

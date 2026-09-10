@@ -1,0 +1,6 @@
+http:
+  routers:
+    ping:
+      rule: Host(`ping.local.irken-empire.org`)
+      entrypoints: websecure
+      service: ping@internal

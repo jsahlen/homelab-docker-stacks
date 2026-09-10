@@ -1,0 +1,12 @@
+http:
+  routers:
+    apprise:
+      rule: Host(`apprise.local.irken-empire.org`)
+      entrypoints: websecure
+      service: apprise
+
+  services:
+    apprise:
+      loadbalancer:
+        servers:
+          - url: http://apprise:8000

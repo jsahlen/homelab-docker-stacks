@@ -1,0 +1,39 @@
+services:
+  tinyauth:
+    image: ghcr.io/tinyauthapp/tinyauth:v5
+    container_name: tinyauth
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Stockholm
+      TINYAUTH_APPURL: ${TINYAUTH_APP_URL:?}
+      TINYAUTH_UI_BACKGROUNDIMAGE:
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTID: ${TINYAUTH_POCKET_ID_CLIENT_ID:?}
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTSECRETFILE: /run/secrets/tinyauth_pocket_id_client_secret
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL: ${POCKET_ID_APP_URL:?}/authorize
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL: ${POCKET_ID_APP_URL:?}/api/oidc/token
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL: ${POCKET_ID_APP_URL:?}/api/oidc/userinfo
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL: ${TINYAUTH_APP_URL:?}/api/oauth/callback/pocketid
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES: openid email profile groups
+      TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME: Pocket ID
+      TINYAUTH_OAUTH_AUTOREDIRECT: pocketid
+      TINYAUTH_APPS_LIDARR_PATH_ALLOW: ^\/api\/
+      TINYAUTH_APPS_PROWLARR_PATH_ALLOW: ^\/api\/
+      TINYAUTH_APPS_RADARR_PATH_ALLOW: ^\/api\/
+      TINYAUTH_APPS_RADARR-4K_PATH_ALLOW: ^\/api\/
+      TINYAUTH_APPS_SABNZBD_PATH_ALLOW: ^\/api
+      TINYAUTH_APPS_SONARR_PATH_ALLOW: ^\/api\/
+    secrets:
+      - tinyauth_pocket_id_client_secret
+    networks:
+      default: null
+      rproxy:
+        aliases:
+          - tinyauth-internal
+
+networks:
+  rproxy:
+    external: true
+
+secrets:
+  tinyauth_pocket_id_client_secret:
+    file: ./secrets/tinyauth_pocket_id_client_secret

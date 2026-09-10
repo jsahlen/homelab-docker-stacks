@@ -1,0 +1,20 @@
+http:
+  routers:
+    qui:
+      rule: (Host(`qui.local.irken-empire.org`) || Host(`qb.local.irken-empire.org`))
+      entrypoints: websecure
+      service: qui
+      middlewares:
+        - redirect-qui
+
+  middlewares:
+    redirect-qui:
+      redirectRegex:
+        regex: "^http[s]?://qui.local.irken-empire.org/(.*)"
+        replacement: "https://qb.local.irken-empire.org/${1}"
+
+  services:
+    qui:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8212

@@ -1,0 +1,14 @@
+http:
+  routers:
+    sabnzbd:
+      rule: Host(`sabnzbd.local.irken-empire.org`)
+      entrypoints: websecure
+      service: sabnzbd
+      middlewares:
+        - tinyauth
+
+  services:
+    sabnzbd:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8209

@@ -1,0 +1,12 @@
+http:
+  routers:
+    whoami:
+      rule: Host(`ct-edge.local.irken-empire.org`)
+      entrypoints: websecure
+      service: whoami
+
+  services:
+    whoami:
+      loadbalancer:
+        servers:
+          - url: http://whoami:80

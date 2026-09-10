@@ -1,0 +1,14 @@
+http:
+  routers:
+    downloads-redirect:
+      rule: Host(`downloads.local.irken-empire.org`)
+      entrypoints: websecure
+      service: noop@internal
+      middlewares:
+        - downloads-redirect
+
+  middlewares:
+    downloads-redirect:
+      redirectRegex:
+        regex: "^http[s]?://downloads.local.irken-empire.org/([^/]+)(.*)"
+        replacement: https://${1}.local.irken-empire.org${2}

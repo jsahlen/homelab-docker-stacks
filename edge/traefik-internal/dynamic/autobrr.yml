@@ -1,0 +1,12 @@
+http:
+  routers:
+    autobrr:
+      rule: Host(`autobrr.local.irken-empire.org`)
+      entrypoints: websecure
+      service: autobrr
+
+  services:
+    autobrr:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8201

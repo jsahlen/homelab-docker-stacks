@@ -1,0 +1,24 @@
+http:
+  routers:
+    qbittorrent:
+      rule: Host(`qbittorrent.local.irken-empire.org`)
+      entrypoints: websecure
+      service: qbittorrent
+      middlewares:
+        - tinyauth
+        - qb-headers
+
+  middlewares:
+    qb-headers:
+      headers:
+        customRequestHeaders:
+          X-Frame-Options: SAMEORIGIN
+          Referer: ''
+          Origin: ''
+
+  services:
+    qbittorrent:
+      loadbalancer:
+        passhostheader: false
+        servers:
+          - url: http://ct-downloads:8211

@@ -1,0 +1,14 @@
+http:
+  routers:
+    calibre-web:
+      rule: Host(`calibre-web.local.irken-empire.org`)
+      entrypoints: websecure
+      service: calibre-web
+      middlewares:
+        - tinyauth
+
+  services:
+    calibre-web:
+      loadbalancer:
+        servers:
+          - url: http://ct-media:8083

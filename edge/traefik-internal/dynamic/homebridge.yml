@@ -1,0 +1,14 @@
+http:
+  routers:
+    homebridge:
+      rule: Host(`homebridge.local.irken-empire.org`)
+      entrypoints: websecure
+      service: homebridge
+      middlewares:
+        - tinyauth
+
+  services:
+    homebridge:
+      loadbalancer:
+        servers:
+          - url: http://10.120.5.20:8080

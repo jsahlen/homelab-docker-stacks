@@ -1,0 +1,26 @@
+http:
+  routers:
+    komga-login-redirect:
+      rule: (Host(`komga.local.irken-empire.org`) && Path(`/login`) && Method(`GET`))
+      entrypoints: websecure
+      service: komga
+      priority: 100
+      middlewares:
+        - komga-oauth-redirect
+    komga:
+      rule: Host(`komga.local.irken-empire.org`)
+      entrypoints: websecure
+      service: komga
+
+  middlewares:
+    komga-oauth-redirect:
+      redirectRegex:
+        regex: ".*"
+        replacement: "https://komga.local.irken-empire.org/oauth2/authorization/pocketid"
+        permanent: false
+
+  services:
+    komga:
+      loadbalancer:
+        servers:
+          - url: http://ct-media.local.irken-empire.org:8056

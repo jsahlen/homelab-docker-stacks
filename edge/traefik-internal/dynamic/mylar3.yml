@@ -1,0 +1,14 @@
+http:
+  routers:
+    mylar3:
+      rule: Host(`mylar.local.irken-empire.org`)
+      entrypoints: websecure
+      service: mylar3
+      middlewares:
+        - tinyauth
+
+  services:
+    mylar3:
+      loadbalancer:
+        servers:
+          - url: http://ct-downloads:8090

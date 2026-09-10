@@ -1,0 +1,12 @@
+http:
+  routers:
+    tautulli:
+      rule: Host(`tautulli.local.irken-empire.org`)
+      entrypoints: websecure
+      service: tautulli
+
+  services:
+    tautulli:
+      loadbalancer:
+        servers:
+          - url: http://ct-media.local.irken-empire.org:8181
