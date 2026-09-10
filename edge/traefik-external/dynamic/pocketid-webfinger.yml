@@ -1,0 +1,12 @@
+http:
+  routers:
+    pocketid-webfinger:
+      rule: (Host(`irken-empire.org`) || Host(`jsahlen.se`)) && PathPrefix(`/.well-known/webfinger`)
+      entrypoints: websecure
+      service: pocketid-webfinger
+
+  services:
+    pocketid-webfinger:
+      loadbalancer:
+        servers:
+          - url: http://pocketid-webfinger:8000

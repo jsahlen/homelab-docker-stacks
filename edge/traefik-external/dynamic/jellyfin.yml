@@ -1,0 +1,12 @@
+http:
+  routers:
+    jellyfin:
+      rule: Host(`jellyfin.irken-empire.org`)
+      entrypoints: websecure
+      service: jellyfin
+
+  services:
+    jellyfin:
+      loadbalancer:
+        servers:
+          - url: http://10.120.200.28:8096

@@ -1,0 +1,71 @@
+services:
+  traefik:
+    image: traefik:3
+    container_name: traefik-external
+    restart: unless-stopped
+    user: 1005:1005
+    command:
+      - --ping.manualRouting=true
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.watch=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=cloudflare
+      - --certificatesresolvers.cloudflare.acme.email=${EMAIL:?}
+      - --certificatesresolvers.cloudflare.acme.storage=/etc/traefik/acme.json
+      - --certificatesresolvers.cloudflare.acme.dnschallenge=true
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
+    network_mode: service:gluetun
+    environment:
+      CF_DNS_API_TOKEN_FILE: /run/secrets/cloudflare_dns_api_token
+    secrets:
+      - cloudflare_dns_api_token
+    volumes:
+      - ./dynamic:/etc/traefik/dynamic:ro
+      - ./data/acme.json:/etc/traefik/acme.json
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: traefik-external-gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      TZ: Europe/Stockholm
+      HTTP_CONTROL_SERVER_AUTH_DEFAULT_ROLE: '{"auth":"none"}'
+      VPN_SERVICE_PROVIDER: custom
+      VPN_TYPE: wireguard
+      WIREGUARD_ENDPOINT_IP: ${WIREGUARD_ENDPOINT_IP:?}
+      WIREGUARD_ENDPOINT_PORT: ${WIREGUARD_ENDPOINT_PORT:-51820}
+      WIREGUARD_PUBLIC_KEY: ${WIREGUARD_PUBLIC_KEY:?}
+      FIREWALL_VPN_INPUT_PORTS: 80,443
+      FIREWALL_OUTBOUND_SUBNETS: ${LAN_SUBNET:-192.168.1.0/24}
+      UPDATER_PERIOD: 24h
+    networks:
+      default: null
+      rproxy: null
+    secrets:
+      - wireguard_private_key
+      - wireguard_addresses
+    ports:
+      # gluetun control server: GET /v1/publicip/ip to verify the tunnel.
+      # Bind to loopback and reach it over SSH if you'd rather not expose it.
+      - "127.0.0.1:8008:8000/tcp"
+      - "${EXTERNAL_LAN_HTTP_PORT:?}:80/tcp"
+      - "${EXTERNAL_LAN_HTTPS_PORT:?}:443/tcp"
+
+networks:
+  rproxy:
+    external: true
+
+secrets:
+  cloudflare_dns_api_token:
+    file: ./secrets/cloudflare_dns_api_token
+  wireguard_private_key:
+    file: ./secrets/wireguard_private_key
+  wireguard_addresses:
+    file: ./secrets/wireguard_addresses

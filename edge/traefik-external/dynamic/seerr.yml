@@ -1,0 +1,24 @@
+http:
+  routers:
+    seerr:
+      rule: Host(`seerr.irken-empire.org`)
+      entrypoints: websecure
+      service: seerr
+    overseerr:
+      rule: Host(`overseerr.irken-empire.org`)
+      entrypoints: websecure
+      middlewares:
+        - redirect-overseerr-to-seerr
+      service: noop@internal
+
+  middlewares:
+    redirect-overseerr-to-seerr:
+      redirectRegex:
+        regex: "http[s]?://overseerr.irken-empire.org/(.*)"
+        replacement: "https://seerr.irken-empire.org/${1}"
+
+  services:
+    seerr:
+      loadbalancer:
+        servers:
+          - url: http://10.120.200.28:8055

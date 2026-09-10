@@ -1,0 +1,40 @@
+services:
+  pocket-id:
+    image: ghcr.io/pocket-id/pocket-id:v2
+    container_name: pocket-id
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Stockholm
+      PUID: 1005
+      PGID: 1005
+      APP_URL: ${POCKET_ID_APP_URL:?}
+      ENCRYPTION_KEY_FILE: /run/secrets/pocket_id_encryption_key
+      TRUST_PROXY: ${POCKET_ID_TRUST_PROXY:-false}
+    secrets:
+      - pocket_id_encryption_key
+    volumes:
+      - ./data:/app/data
+    networks:
+      rproxy: null
+    healthcheck:
+      test: [ "CMD", "/app/pocket-id", "healthcheck" ]
+      interval: 1m30s
+      timeout: 5s
+      retries: 2
+      start_period: 10s
+  pocketid-webfinger:
+    image: ghcr.io/luccitan/pocketid-webfinger:latest
+    container_name: pocketid-webfinger
+    restart: unless-stopped
+    environment:
+      OIDC_ENDPOINT: ${POCKET_ID_APP_URL:?}
+    networks:
+      rproxy: null
+
+secrets:
+  pocket_id_encryption_key:
+    file: ./secrets/pocket_id_encryption_key
+
+networks:
+  rproxy:
+    external: true

@@ -1,0 +1,12 @@
+http:
+  routers:
+    audiobookshelf:
+      rule: Host(`audiobookshelf.irken-empire.org`)
+      entrypoints: websecure
+      service: audiobookshelf
+
+  services:
+    audiobookshelf:
+      loadbalancer:
+        servers:
+          - url: http://10.120.200.28:8078

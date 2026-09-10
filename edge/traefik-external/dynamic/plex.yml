@@ -1,0 +1,12 @@
+http:
+  routers:
+    plex:
+      rule: Host(`plex.irken-empire.org`)
+      entrypoints: websecure
+      service: plex
+
+  services:
+    plex:
+      loadbalancer:
+        servers:
+          - url: http://10.120.200.28:32400

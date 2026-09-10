@@ -1,0 +1,12 @@
+http:
+  routers:
+    pocket-id:
+      rule: Host(`id.irken-empire.org`)
+      entrypoints: websecure
+      service: pocket-id
+
+  services:
+    pocket-id:
+      loadbalancer:
+        servers:
+          - url: http://pocket-id:1411
