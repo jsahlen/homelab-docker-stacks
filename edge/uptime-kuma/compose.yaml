@@ -1,0 +1,15 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2-rootless
+    container_name: uptime-kuma
+    user: 1005:1005
+    restart: unless-stopped
+    networks:
+      default: null
+      rproxy: null
+    volumes:
+      - ./data:/app/data
+
+networks:
+  rproxy:
+    external: true
